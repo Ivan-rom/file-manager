@@ -3,6 +3,7 @@ import { homedir } from "node:os";
 import { changeDirectory, logDirectory } from "./nwd.js";
 import { greeting, close } from "./prompts.js";
 import { osInfo } from "./os.js";
+import { calculateHash } from "./hash.js";
 
 greeting();
 changeDirectory(homedir());
@@ -33,6 +34,11 @@ process.stdin.on("data", async (data) => {
     case "os":
       const option = dataString.split(" ").slice(1)[0];
       osInfo(option);
+      break;
+
+    case "hash":
+      const filePath = dataString.split(" ").slice(1).join(" ").trim();
+      calculateHash(filePath);
       break;
 
     default:
