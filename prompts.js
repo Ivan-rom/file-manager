@@ -1,12 +1,14 @@
 const userName = getUsername();
 
-console.log(`Welcome to the File Manager, ${userName}!`);
+export function greeting() {
+  console.log(`Welcome to the File Manager, ${userName}!`);
+}
 
 function farewell() {
   console.log(`Thank you for using File Manager, ${userName}, goodbye!`);
 }
 
-function close() {
+export function close() {
   process.exit();
 }
 
