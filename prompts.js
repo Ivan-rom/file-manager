@@ -40,4 +40,4 @@ process.on("exit", farewell);
 process.on("SIGINT", close);
 process.on("SIGUSR1", close);
 process.on("SIGUSR2", close);
-process.on("uncaughtException", close);
+// process.on("uncaughtException", close);

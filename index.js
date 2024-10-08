@@ -4,9 +4,16 @@ import { changeDirectory, logDirectory } from "./nwd.js";
 import { greeting, close } from "./prompts.js";
 import { osInfo } from "./os.js";
 import { calculateHash } from "./hash.js";
+import {
+  copyFile,
+  createFile,
+  deleteFile,
+  readFile,
+  renameFile,
+} from "./fs.js";
 
 greeting();
-changeDirectory(homedir());
+// changeDirectory(homedir());
 
 process.stdin.on("data", async (data) => {
   const dataString = data.toString().trim();
@@ -37,8 +44,35 @@ process.stdin.on("data", async (data) => {
       break;
 
     case "hash":
-      const filePath = dataString.split(" ").slice(1).join(" ").trim();
-      calculateHash(filePath);
+      const hashPath = dataString.split(" ").slice(1).join(" ").trim();
+      calculateHash(hashPath);
+      break;
+
+    case "cat":
+      const readPath = dataString.split(" ").slice(1).join(" ").trim();
+      readFile(readPath);
+      break;
+
+    case "add":
+      const newFileName = dataString.split(" ").slice(1).join(" ").trim();
+      createFile(newFileName);
+      break;
+
+    case "rn":
+      const fileNames = dataString.split(" ").slice(1).join(" ").trim();
+      const [oldName, newName] = fileNames.split(" ");
+      renameFile(oldName, newName);
+      break;
+
+    case "cp":
+      const copyFileNames = dataString.split(" ").slice(1).join(" ").trim();
+      const [sourceName, distName] = copyFileNames.split(" ");
+      copyFile(sourceName, distName);
+      break;
+
+    case "rm":
+      const deleteFileName = dataString.split(" ").slice(1).join(" ").trim();
+      deleteFile(deleteFileName);
       break;
 
     default:
