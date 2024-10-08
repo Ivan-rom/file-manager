@@ -15,13 +15,17 @@ export function close() {
 function getUsername() {
   const usernameVariableName = "username";
 
-  const argv = process.argv.slice(2);
-  const usernameArgv = argv.find((arg) =>
-    arg.startsWith(`--${usernameVariableName}=`)
-  );
-  const usernameValue = usernameArgv.split("=")[1];
+  try {
+    const argv = process.argv.slice(2);
+    const usernameArgv = argv.find((arg) =>
+      arg.startsWith(`--${usernameVariableName}=`)
+    );
+    const usernameValue = usernameArgv.split("=")[1];
 
-  return usernameValue;
+    return usernameValue;
+  } catch {
+    return;
+  }
 }
 
 process.stdin.on("data", (data) => {
