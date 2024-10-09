@@ -13,6 +13,7 @@ import {
   renameFile,
 } from "./fs.js";
 import { compressFile, decompressFile } from "./brotli.js";
+import { separateCommandAndParams } from "./utils.js";
 
 greeting();
 changeDirectory(homedir());
@@ -20,7 +21,7 @@ changeDirectory(homedir());
 process.stdin.on("data", async (data) => {
   const dataString = data.toString().trim();
 
-  const command = dataString.split(" ")[0];
+  const [command, params] = separateCommandAndParams(dataString);
 
   switch (command) {
     case ".exit":
@@ -36,69 +37,47 @@ process.stdin.on("data", async (data) => {
       break;
 
     case "cd":
-      const newDirectory = dataString.split(" ").slice(1).join(" ").trim();
-      changeDirectory(newDirectory);
+      changeDirectory(params);
       break;
 
     case "os":
-      const option = dataString.split(" ").slice(1)[0];
-      osInfo(option);
+      osInfo(params);
       break;
 
     case "hash":
-      const hashPath = dataString.split(" ").slice(1).join(" ").trim();
-      calculateHash(hashPath);
+      calculateHash(params);
       break;
 
     case "cat":
-      const readPath = dataString.split(" ").slice(1).join(" ").trim();
-      readFile(readPath);
+      readFile(params);
       break;
 
     case "add":
-      const newFileName = dataString.split(" ").slice(1).join(" ").trim();
-      createFile(newFileName);
+      createFile(params);
       break;
 
     case "rn":
-      const fileNames = dataString.split(" ").slice(1).join(" ").trim();
-      const [oldName, newName] = fileNames.split(" ");
-      renameFile(oldName, newName);
+      renameFile(...params.split(" "));
       break;
 
     case "cp":
-      const copyFileNames = dataString.split(" ").slice(1).join(" ").trim();
-      const [sourceName, distName] = copyFileNames.split(" ");
-      copyFile(sourceName, distName);
+      copyFile(...params.split(" "));
       break;
 
     case "rm":
-      const deleteFileName = dataString.split(" ").slice(1).join(" ").trim();
-      deleteFile(deleteFileName);
+      deleteFile(params);
       break;
 
     case "mv":
-      const moveFileNames = dataString.split(" ").slice(1).join(" ").trim();
-      const [moveSourceName, moveDistName] = moveFileNames.split(" ");
-      moveFile(moveSourceName, moveDistName);
+      moveFile(...params.split(" "));
       break;
 
     case "compress":
-      const compressFileNames = dataString.split(" ").slice(1).join(" ").trim();
-      const [compressSourceName, compressDistName] =
-        compressFileNames.split(" ");
-      compressFile(compressSourceName, compressDistName);
+      compressFile(...params.split(" "));
       break;
 
     case "decompress":
-      const decompressFileNames = dataString
-        .split(" ")
-        .slice(1)
-        .join(" ")
-        .trim();
-      const [decompressSourceName, decompressDistName] =
-        decompressFileNames.split(" ");
-      decompressFile(decompressSourceName, decompressDistName);
+      decompressFile(...params.split(" "));
       break;
 
     default:
