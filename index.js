@@ -102,6 +102,7 @@ process.stdin.on("data", async (data) => {
       break;
 
     default:
+      console.log("Unknown command");
       break;
   }
 });
