@@ -12,9 +12,10 @@ import {
   readFile,
   renameFile,
 } from "./fs.js";
+import { compressFile, decompressFile } from "./brotli.js";
 
 greeting();
-// changeDirectory(homedir());
+changeDirectory(homedir());
 
 process.stdin.on("data", async (data) => {
   const dataString = data.toString().trim();
@@ -80,6 +81,24 @@ process.stdin.on("data", async (data) => {
       const moveFileNames = dataString.split(" ").slice(1).join(" ").trim();
       const [moveSourceName, moveDistName] = moveFileNames.split(" ");
       moveFile(moveSourceName, moveDistName);
+      break;
+
+    case "compress":
+      const compressFileNames = dataString.split(" ").slice(1).join(" ").trim();
+      const [compressSourceName, compressDistName] =
+        compressFileNames.split(" ");
+      compressFile(compressSourceName, compressDistName);
+      break;
+
+    case "decompress":
+      const decompressFileNames = dataString
+        .split(" ")
+        .slice(1)
+        .join(" ")
+        .trim();
+      const [decompressSourceName, decompressDistName] =
+        decompressFileNames.split(" ");
+      decompressFile(decompressSourceName, decompressDistName);
       break;
 
     default:
