@@ -26,20 +26,29 @@ export function renameFile(oldName, newName) {
 }
 
 export function copyFile(sourceFile, distFile) {
-  createFile(distFile, "", (err) => {
-    if (err) console.log(err);
-  });
+  return new Promise((res, rej) => {
+    createFile(distFile, "", (err) => {
+      if (err) console.log(err);
+      rej();
+    });
 
-  const readStream = createReadStream(sourceFile, "utf-8");
-  const writeStream = createWriteStream(distFile);
+    const readStream = createReadStream(sourceFile, "utf-8");
+    const writeStream = createWriteStream(distFile);
 
-  readStream.on("data", (chunk) => {
-    writeStream.write(chunk);
+    readStream.pipe(writeStream);
+
+    res();
   });
 }
 
 export function deleteFile(fileName) {
   unlink(fileName, (err) => {
     if (err) console.log(err);
+  });
+}
+
+export function moveFile(initialPath, distPath) {
+  copyFile(initialPath, distPath).then(() => {
+    deleteFile(initialPath);
   });
 }

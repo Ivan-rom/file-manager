@@ -8,6 +8,7 @@ import {
   copyFile,
   createFile,
   deleteFile,
+  moveFile,
   readFile,
   renameFile,
 } from "./fs.js";
@@ -73,6 +74,12 @@ process.stdin.on("data", async (data) => {
     case "rm":
       const deleteFileName = dataString.split(" ").slice(1).join(" ").trim();
       deleteFile(deleteFileName);
+      break;
+
+    case "mv":
+      const moveFileNames = dataString.split(" ").slice(1).join(" ").trim();
+      const [moveSourceName, moveDistName] = moveFileNames.split(" ");
+      moveFile(moveSourceName, moveDistName);
       break;
 
     default:
