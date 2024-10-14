@@ -12,4 +12,8 @@ export function calculateHash(filePath) {
     .on("data", (data) => {
       console.log(data);
     });
+
+  stream.on("error", (error) => {
+    console.log(error);
+  });
 }

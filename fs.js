@@ -11,6 +11,10 @@ export function readFile(path) {
   stream.on("data", (chunk) => {
     console.log(chunk);
   });
+
+  stream.on("error", (error) => {
+    console.log(error);
+  });
 }
 
 export function createFile(fileName) {

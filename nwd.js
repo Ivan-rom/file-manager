@@ -8,8 +8,8 @@ export function logDirectory() {
       .filter((el) => el.isFile())
       .map((file) => ({ Name: file.name, Type: "file" }))
       .sort(function (a, b) {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
+        if (a.Name < b.Name) return -1;
+        if (a.Name > b.Name) return 1;
         return 0;
       });
 
@@ -17,8 +17,8 @@ export function logDirectory() {
       .filter((el) => el.isDirectory())
       .map((file) => ({ Name: file.name, Type: "directory" }))
       .sort(function (a, b) {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
+        if (a.Name < b.Name) return -1;
+        if (a.Name > b.Name) return 1;
         return 0;
       });
 

@@ -28,14 +28,6 @@ function getUsername() {
   }
 }
 
-process.stdin.on("data", (data) => {
-  const dataString = data.toString().trim();
-
-  if (dataString === ".exit") {
-    close();
-  }
-});
-
 process.on("exit", farewell);
 process.on("SIGINT", close);
 process.on("SIGUSR1", close);
