@@ -3,7 +3,7 @@ import logDirectory from "./helpers/logDirectory.js";
 import navigation from "./navigation/index.js";
 import filesOperations from "./filesOperations/index.js";
 import operatingSystem from "./operatingSystem/index.js";
-import hashCalculate from "../hashCalculate/index.js";
+import hashCalculate from "./hashCalculate/index.js";
 
 export default async function dispatch(data) {
   try {
