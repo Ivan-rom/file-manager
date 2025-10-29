@@ -4,6 +4,7 @@ import navigation from "./navigation/index.js";
 import filesOperations from "./filesOperations/index.js";
 import operatingSystem from "./operatingSystem/index.js";
 import hashCalculate from "./hashCalculate/index.js";
+import brotli from "./brotli/index.js";
 
 export default async function dispatch(data) {
   try {
@@ -42,6 +43,13 @@ export default async function dispatch(data) {
       // Hash calculation
       case "hash":
         await hashCalculate(command, args[0]);
+        logDirectory();
+        break;
+
+      // File compression / decompression
+      case "compress":
+      case "decompress":
+        brotli(command, ...args);
         logDirectory();
         break;
 
