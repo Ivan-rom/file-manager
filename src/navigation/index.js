@@ -1,9 +1,9 @@
 import process from "node:process";
-import fs from "node:fs";
+import fs from "node:fs/promises";
 
 import getDirentType from "./getDirentType.js";
 
-export default function nwd(command, path) {
+export default async function navigation(command, path) {
   switch (command) {
     case "up":
       process.chdir("..");
@@ -19,16 +19,16 @@ export default function nwd(command, path) {
       break;
 
     case "ls":
-      fs.readdir(process.cwd(), { withFileTypes: true }, (err, dirent) => {
-        if (err) throw err;
-
-        console.table(
-          dirent.map((d) => ({
-            name: d.name,
-            type: getDirentType(d),
-          }))
-        );
-      });
+      await fs
+        .readdir(process.cwd(), { withFileTypes: true })
+        .then((dirent) => {
+          console.table(
+            dirent.map((d) => ({
+              name: d.name,
+              type: getDirentType(d),
+            }))
+          );
+        });
       break;
 
     default:

@@ -13,12 +13,8 @@ function initializeApp() {
   console.log("Please input a command");
 
   process.stdin.on("data", (buffer) => {
-    try {
-      const data = buffer.toString().trim();
-      dispatch(data);
-    } catch {
-      console.log("Operation failed");
-    }
+    const data = buffer.toString().trim();
+    dispatch(data);
   });
 
   process.on("SIGINT", () => process.exit());
