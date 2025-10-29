@@ -1,6 +1,7 @@
 import process from "node:process";
-import nwd from "./navigation/index.js";
 import logDirectory from "./helpers/logDirectory.js";
+import navigation from "./navigation/index.js";
+import filesOperations from "./filesOperations/index.js";
 
 export default async function dispatch(data) {
   try {
@@ -15,6 +16,18 @@ export default async function dispatch(data) {
       case "ls":
       case "cd":
         await navigation(command, args[0]);
+        logDirectory();
+        break;
+
+      // Basic operations with files
+      case "cat":
+      case "add":
+      case "mkdir":
+      case "rn":
+      case "cp":
+      case "mv":
+      case "rm":
+        await filesOperations(command, ...args);
         logDirectory();
         break;
 
