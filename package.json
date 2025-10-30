@@ -1,0 +1,21 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Ivan-rom/file-manager#readme",
+  "bugs": {
+    "url": "https://github.com/Ivan-rom/file-manager/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ivan-rom/file-manager.git"
+  },
+  "license": "ISC",
+  "author": "ivan-rom",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
+  }
+}
