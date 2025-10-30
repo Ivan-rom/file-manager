@@ -56,10 +56,12 @@ export default async function filesOperations(command, srcDir, destDir) {
           readStream.pipe(writeStream);
           readStream.on("error", (err) => {
             readStream.close();
+            writeStream.close();
             reject(err);
           });
           readStream.on("end", () => {
             readStream.close();
+            writeStream.close();
             resolve();
           });
         } catch (err) {

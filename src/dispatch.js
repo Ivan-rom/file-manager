@@ -53,7 +53,8 @@ export default async function dispatch(data) {
         return;
     }
     logDirectory();
-  } catch {
+  } catch (error) {
+    console.log(error?.message);
     console.log("Operation failed");
   }
 }
