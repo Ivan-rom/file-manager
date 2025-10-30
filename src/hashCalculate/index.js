@@ -1,13 +1,20 @@
 import fs from "node:fs";
 import crypto from "node:crypto";
+import normalizeDir from "../helpers/normalizeDir.js";
+import doesFileExist from "../helpers/doesFileExist.js";
 
 export default async function hashCalculate(command, filePath) {
+  const correctedSrcDir = normalizeDir(filePath || "");
+
+  if (!(await doesFileExist(correctedSrcDir))) {
+    throw new Error("Source file does not exist");
+  }
+
   try {
-    await fs.promises.access(filePath);
     const hash = crypto.createHash("sha256");
-    fs.createReadStream(filePath).pipe(hash);
+    fs.createReadStream(correctedSrcDir).pipe(hash);
     console.log(hash.digest("hex"));
   } catch {
-    throw new Error("File does not exist");
+    throw new Error("Hash calculation failed");
   }
 }

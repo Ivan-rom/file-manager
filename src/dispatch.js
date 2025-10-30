@@ -19,7 +19,6 @@ export default async function dispatch(data) {
       case "ls":
       case "cd":
         await navigation(command, args[0]);
-        logDirectory();
         break;
 
       // Basic operations with files
@@ -31,32 +30,29 @@ export default async function dispatch(data) {
       case "mv":
       case "rm":
         await filesOperations(command, ...args);
-        logDirectory();
         break;
 
       // Operating system info
       case "os":
         operatingSystem(command, args[0]);
-        logDirectory();
         break;
 
       // Hash calculation
       case "hash":
         await hashCalculate(command, args[0]);
-        logDirectory();
         break;
 
       // File compression / decompression
       case "compress":
       case "decompress":
-        brotli(command, ...args);
-        logDirectory();
+        await brotli(command, ...args);
         break;
 
       default:
         console.log("Invalid input");
-        break;
+        return;
     }
+    logDirectory();
   } catch {
     console.log("Operation failed");
   }

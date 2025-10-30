@@ -1,80 +1,69 @@
 import fs from "node:fs";
 import fsPromises from "node:fs/promises";
-import path from "node:path";
+import normalizeDir from "../helpers/normalizeDir.js";
+import doesFileExist from "../helpers/doesFileExist.js";
 
 export default async function filesOperations(command, srcDir, destDir) {
+  const correctedSrcDir = normalizeDir(srcDir || "");
+  const correctedDestDir = normalizeDir(destDir || "");
+
   switch (command) {
     case "cat":
       await new Promise((res, rej) => {
-        const stream = fs.createReadStream(srcDir, {
+        const stream = fs.createReadStream(correctedSrcDir, {
           encoding: "utf8",
         });
-        stream.on("data", (chunk) => {
-          console.log(chunk);
-          res();
-        });
+        stream.on("data", (chunk) => console.log(chunk));
+        stream.on("end", () => res());
         stream.on("error", (err) => rej(err));
       });
       break;
 
     case "add":
-      try {
-        await fsPromises.access(srcDir);
+      if (await doesFileExist(correctedSrcDir)) {
         throw new Error("File already exists");
-      } catch {
-        await fsPromises.writeFile(srcDir, "");
-        console.log("File created");
       }
+      await fsPromises.writeFile(correctedSrcDir, "");
       break;
 
     case "mkdir":
-      await fsPromises.mkdir(srcDir);
-      console.log("Directory created");
+      await fsPromises.mkdir(correctedSrcDir);
       break;
 
     case "rn":
-      await fsPromises.rename(srcDir, destDir);
-      console.log("File renamed");
+      if (await doesFileExist(correctedDestDir)) {
+        throw new Error("File already exists");
+      }
+      await fsPromises.rename(correctedSrcDir, correctedDestDir);
       break;
 
     case "rm":
-      await fsPromises.unlink(srcDir);
+      await fsPromises.unlink(correctedSrcDir);
       break;
 
     case "cp":
       await new Promise(async (resolve, reject) => {
-        const correctedDir = destDir.startsWith(".")
-          ? `${process.cwd()}${path.sep}${destDir}`
-          : destDir.startsWith("/") || destDir.startsWith("\\")
-          ? `${process.cwd()}${path.sep}${destDir.slice(1)}`
-          : destDir;
-
-        try {
-          await fsPromises.access(srcDir);
-        } catch {
+        if (!(await doesFileExist(correctedSrcDir))) {
           return reject("Source file does not exist");
         }
-
-        try {
-          await fsPromises.access(correctedDir);
+        if (await doesFileExist(correctedDestDir)) {
           return reject("File with the same name already exists");
-        } catch {
-          try {
-            await fsPromises.writeFile(correctedDir, "");
-            const readStream = fs.createReadStream(srcDir);
-            const writeStream = fs.createWriteStream(correctedDir);
-            readStream.pipe(writeStream);
-            readStream.on("error", (err) => {
-              readStream.close();
-              reject(err);
-            });
-            readStream.on("end", () => {
-              readStream.close();
-              resolve();
-            });
-          } catch (err) {
+        }
+        try {
+          await fsPromises.writeFile(correctedDestDir, "");
+          const readStream = fs.createReadStream(correctedSrcDir);
+          const writeStream = fs.createWriteStream(correctedDestDir);
+          readStream.pipe(writeStream);
+          readStream.on("error", (err) => {
+            readStream.close();
             reject(err);
-          }
+          });
+          readStream.on("end", () => {
+            readStream.close();
+            resolve();
+          });
+        } catch (err) {
+          reject(err);
         }
       });
       break;
